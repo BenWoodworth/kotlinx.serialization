@@ -292,6 +292,7 @@ public final class kotlinx/serialization/descriptors/PrimitiveKind$STRING : kotl
 
 public abstract interface class kotlinx/serialization/descriptors/SerialDescriptor {
 	public fun getAnnotations ()Ljava/util/List;
+	public fun getBaseDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public abstract fun getElementAnnotations (I)Ljava/util/List;
 	public abstract fun getElementDescriptor (I)Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public abstract fun getElementIndex (Ljava/lang/String;)I
@@ -306,6 +307,7 @@ public abstract interface class kotlinx/serialization/descriptors/SerialDescript
 
 public final class kotlinx/serialization/descriptors/SerialDescriptor$DefaultImpls {
 	public static fun getAnnotations (Lkotlinx/serialization/descriptors/SerialDescriptor;)Ljava/util/List;
+	public static fun getBaseDescriptor (Lkotlinx/serialization/descriptors/SerialDescriptor;)Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public static fun isInline (Lkotlinx/serialization/descriptors/SerialDescriptor;)Z
 	public static fun isNullable (Lkotlinx/serialization/descriptors/SerialDescriptor;)Z
 }
@@ -1003,6 +1005,7 @@ public class kotlinx/serialization/internal/PluginGeneratedSerialDescriptor : ko
 	public static synthetic fun addElement$default (Lkotlinx/serialization/internal/PluginGeneratedSerialDescriptor;Ljava/lang/String;ZILjava/lang/Object;)V
 	public fun equals (Ljava/lang/Object;)Z
 	public fun getAnnotations ()Ljava/util/List;
+	public fun getBaseDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public fun getElementAnnotations (I)Ljava/util/List;
 	public fun getElementDescriptor (I)Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public fun getElementIndex (Ljava/lang/String;)I

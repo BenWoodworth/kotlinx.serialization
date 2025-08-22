@@ -17,6 +17,7 @@ class WrappedSerialDescriptorTest {
         assertEquals(original.isNullable, wrapped.isNullable)
         assertEquals(original.annotations, wrapped.annotations)
         assertEquals(original.kind, wrapped.kind)
+        assertSame(original.baseDescriptor, wrapped.baseDescriptor)
 
         for (i in 0 until original.elementsCount) {
             original.getElementDescriptor(i).assertDescriptorEqualsTo(wrapped.getElementDescriptor(i))
@@ -84,5 +85,20 @@ class WrappedSerialDescriptorTest {
         assertEquals(a.hashCode(), b.hashCode())
         assertNotEquals(a, SimpleType.serializer().descriptor)
         assertEquals(a.toString(), "SimpleTypeWrapper(int: kotlin.Int, float: kotlin.Float)")
+    }
+
+    @Test
+    fun testBaseDescriptor() {
+        val base = SimpleType.serializer().descriptor
+
+        val derived = object : SerialDescriptor by base {
+            override val baseDescriptor = base
+            override val serialName = "Derived"
+        }
+
+        val wrapped = SerialDescriptor("WrappedDerived", derived)
+
+        // Should be the innermost descriptor, not the `derived` descriptor that was wrapped
+        assertSame(base, wrapped.baseDescriptor)
     }
 }

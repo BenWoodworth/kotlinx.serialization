@@ -279,6 +279,15 @@ public interface SerialDescriptor {
     public val annotations: List<Annotation> get() = emptyList()
 
     /**
+     * The instance of this descriptor before any additional renaming, nullability, delegation, etc.
+     *
+     * This can be used to introspect for particular serial descriptors, providing transparency to descriptors that are
+     * otherwise obscured after being wrapped.
+     */
+    @ExperimentalSerializationApi
+    public val baseDescriptor: SerialDescriptor get() = this
+
+    /**
      * Returns a positional name of the child at the given [index].
      * Positional name represents a corresponding property name in the class, associated with
      * the current descriptor.

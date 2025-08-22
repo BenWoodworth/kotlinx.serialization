@@ -134,4 +134,19 @@ class SerialDescriptorBuilderTest {
         override fun getElementAnnotations(index: Int): List<Annotation> = error("Should not be called")
         override fun getElementDescriptor(index: Int): SerialDescriptor = error("Should not be called")
     }
+
+    @Test
+    fun testBaseDescriptor() {
+        val base = Wrapper.serializer().descriptor
+
+        val derived = object : SerialDescriptor by base {
+            override val baseDescriptor = base
+            override val serialName = "Derived"
+        }
+
+        val nullable = derived.nullable
+
+        // Should be the innermost descriptor, not the `derived` descriptor that was wrapped
+        assertSame(base, nullable.baseDescriptor)
+    }
 }

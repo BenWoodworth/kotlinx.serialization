@@ -124,6 +124,10 @@ public fun SerialDescriptor(serialName: String, original: SerialDescriptor): Ser
 internal class WrappedSerialDescriptor(override val serialName: String, private val original: SerialDescriptor) :
     SerialDescriptor by original {
 
+    // Field-backed to avoid extra indirection for descriptor wrapped multiple times
+    @ExperimentalSerializationApi
+    override val baseDescriptor: SerialDescriptor = original.baseDescriptor
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is WrappedSerialDescriptor) return false

@@ -148,6 +148,8 @@ abstract interface kotlinx.serialization.descriptors/SerialDescriptor { // kotli
         abstract fun <get-serialName>(): kotlin/String // kotlinx.serialization.descriptors/SerialDescriptor.serialName.<get-serialName>|<get-serialName>(){}[0]
     open val annotations // kotlinx.serialization.descriptors/SerialDescriptor.annotations|{}annotations[0]
         open fun <get-annotations>(): kotlin.collections/List<kotlin/Annotation> // kotlinx.serialization.descriptors/SerialDescriptor.annotations.<get-annotations>|<get-annotations>(){}[0]
+    open val baseDescriptor // kotlinx.serialization.descriptors/SerialDescriptor.baseDescriptor|{}baseDescriptor[0]
+        open fun <get-baseDescriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // kotlinx.serialization.descriptors/SerialDescriptor.baseDescriptor.<get-baseDescriptor>|<get-baseDescriptor>(){}[0]
     open val isInline // kotlinx.serialization.descriptors/SerialDescriptor.isInline|{}isInline[0]
         open fun <get-isInline>(): kotlin/Boolean // kotlinx.serialization.descriptors/SerialDescriptor.isInline.<get-isInline>|<get-isInline>(){}[0]
     open val isNullable // kotlinx.serialization.descriptors/SerialDescriptor.isNullable|{}isNullable[0]

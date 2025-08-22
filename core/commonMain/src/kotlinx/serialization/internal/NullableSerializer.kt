@@ -53,6 +53,10 @@ internal class SerialDescriptorForNullable(
     override val isNullable: Boolean
         get() = true
 
+    // Field-backed to avoid extra indirection for descriptor wrapped multiple times
+    @ExperimentalSerializationApi
+    override val baseDescriptor: SerialDescriptor = original.baseDescriptor
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is SerialDescriptorForNullable) return false
