@@ -7,6 +7,7 @@ package kotlinx.serialization.descriptors
 import kotlinx.serialization.*
 import kotlinx.serialization.builtins.*
 import kotlinx.serialization.encoding.*
+import kotlinx.serialization.internal.NothingSerialDescriptor
 
 /**
  * Serial descriptor is an inherent property of [KSerializer] that describes the structure of the serializable type.
@@ -279,23 +280,37 @@ public interface SerialDescriptor {
     public val annotations: List<Annotation> get() = emptyList()
 
     /**
-     * This descriptor without any additional decoration, such as renaming, nullability, delegation, etc.
+     * This descriptor without any additional changes, such as renaming, nullability, decoration, etc.
      *
-     * The base descriptor can be used to introspect for specific serializable types or descriptor implementations,
-     * providing transparency where descriptors would otherwise be obscured after being wrapped.
+     * The base descriptor can be used to transparently introspect specific serializable types or descriptor
+     * implementations, when details about the original type might otherwise be obscured if wrapped in another
+     * descriptor.
      *
-     * Example:
-     *
+     * Example of introspecting specific types:
      * ```
-     * interface MyFormatSerialDescriptor : SerialDescriptor {
-     *     fun getSchema(configuration: MyFormatConfiguration): MyFormatSchema
+     * class MyNullSerializer : KSerializer<MyNull> {
+     *     // Leverage the built-in descriptor so null-sensitive schemas can identify `null`-derived types generally
+     *     override val descriptor: SerialDescriptor =
+     *         SerialDescriptor("my.app.MyNull", NothingSerializer().descriptor.nullable)
+     *
+     *     // ...
      * }
      *
-     * fun SerialDescriptor.getSchema(configuration: MyFormatConfiguration): MyFormatSchema =
-     *     when (val baseDescriptor = this.baseDescriptor) {
-     *         is MyFormatSerialDescriptor -> baseDescriptor.getSchema(configuration)
-     *         else -> // derive schema from vanilla descriptor
-     *     }
+     * // Null-sensitive formats can't otherwise distinguish `Nothing?` from any other `OBJECT?` kind once renamed
+     * val SerialDescriptor.isNull: Boolean
+     *     get() = isNullable && baseDescriptor == NothingSerializer().descriptor
+     * ```
+     *
+     * Example of introspecting specific implementations:
+     * ```
+     * // Allows specifying format-specific kinds outside of the standard `SerialKind`s
+     * interface MyFormatSerialDescriptor : SerialDescriptor {
+     *     val myFormatKind: MyFormatKind
+     * }
+     *
+     * // Obtains the underlying format-specific kind even if wrapped
+     * val SerialDescriptor.myFormatKind: MyFormatKind?
+     *     get() = (baseDescriptor as? MyFormatSerialDescriptor)?.myFormatKind
      * ```
      */
     @ExperimentalSerializationApi
