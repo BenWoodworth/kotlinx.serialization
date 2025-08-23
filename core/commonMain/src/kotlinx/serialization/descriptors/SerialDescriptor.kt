@@ -279,10 +279,24 @@ public interface SerialDescriptor {
     public val annotations: List<Annotation> get() = emptyList()
 
     /**
-     * The instance of this descriptor before any additional renaming, nullability, delegation, etc.
+     * This descriptor without any additional decoration, such as renaming, nullability, delegation, etc.
      *
-     * This can be used to introspect for particular serial descriptors, providing transparency to descriptors that are
-     * otherwise obscured after being wrapped.
+     * The base descriptor can be used to introspect for specific serializable types or descriptor implementations,
+     * providing transparency where descriptors would otherwise be obscured after being wrapped.
+     *
+     * Example:
+     *
+     * ```
+     * interface MyFormatSerialDescriptor : SerialDescriptor {
+     *     fun getSchema(configuration: MyFormatConfiguration): MyFormatSchema
+     * }
+     *
+     * fun SerialDescriptor.getSchema(configuration: MyFormatConfiguration): MyFormatSchema =
+     *     when (val baseDescriptor = this.baseDescriptor) {
+     *         is MyFormatSerialDescriptor -> baseDescriptor.getSchema(configuration)
+     *         else -> // derive schema from vanilla descriptor
+     *     }
+     * ```
      */
     @ExperimentalSerializationApi
     public val baseDescriptor: SerialDescriptor get() = this
