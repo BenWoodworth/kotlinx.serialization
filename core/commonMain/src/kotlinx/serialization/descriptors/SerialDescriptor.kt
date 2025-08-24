@@ -298,7 +298,7 @@ public interface SerialDescriptor {
      *
      * // Null literal–aware schemas can introspect for the `Nothing` descriptor to identify types that leverage the
      * // built-in `Nothing?` descriptor generally. Using the base descriptor is necessary since, if renamed, the
-     * // `Nothing?` descriptor is otherwise indistinguishable from any other descriptor with `OBJECT` as its `kind`.
+     * // `Nothing?` descriptor is otherwise indistinguishable from any other descriptor with the same `kind`.
      * val SerialDescriptor.isNullLiteral: Boolean
      *     get() = isNullable && baseDescriptor == NothingSerializer().descriptor
      * ```
