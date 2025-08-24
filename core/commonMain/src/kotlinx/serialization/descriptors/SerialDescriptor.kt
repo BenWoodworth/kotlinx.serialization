@@ -283,21 +283,23 @@ public interface SerialDescriptor {
      * This descriptor without any additional changes, such as renaming, nullability, decoration, etc.
      *
      * The base descriptor can be used to transparently introspect specific serializable types or descriptor
-     * implementations, when details about the original type might otherwise be obscured if wrapped in another
+     * implementations when details about the original type might otherwise be obscured if wrapped in another
      * descriptor.
      *
      * Example of introspecting specific types:
      * ```
      * class MyNullSerializer : KSerializer<MyNull> {
-     *     // Leverage the built-in descriptor so null-sensitive schemas can identify `null`-derived types generally
+     *     // Kotlin's `null` literal has type `Nothing?`, so leverage that descriptor
      *     override val descriptor: SerialDescriptor =
-     *         SerialDescriptor("my.app.MyNull", NothingSerializer().descriptor.nullable)
+     *         SerialDescriptor("my.app.MyNull", serialDescriptor<Nothing?>())
      *
      *     // ...
      * }
      *
-     * // Null-sensitive formats can't otherwise distinguish `Nothing?` from any other `OBJECT?` kind once renamed
-     * val SerialDescriptor.isNull: Boolean
+     * // Null literal–aware schemas can introspect for the `Nothing` descriptor to identify types that leverage the
+     * // built-in `Nothing?` descriptor generally. Using the base descriptor is necessary since, if renamed, the
+     * // `Nothing?` descriptor is otherwise indistinguishable from any other descriptor with `OBJECT` as its `kind`.
+     * val SerialDescriptor.isNullLiteral: Boolean
      *     get() = isNullable && baseDescriptor == NothingSerializer().descriptor
      * ```
      *
